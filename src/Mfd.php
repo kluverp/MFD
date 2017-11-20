@@ -94,6 +94,8 @@ class MFD
         switch($c) {
             case 27:
                 $this->screen = 'ESC';
+                // make the terminal behave normally again
+                system('stty sane');
                 exit("\nQuit.\n");
                 break;
             case 49:

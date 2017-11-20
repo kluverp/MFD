@@ -29,12 +29,17 @@ class MFD
     /**
      * Read user input
      */
-    public function readchar($prompt)
+    public function readChar($prompt)
     {
         readline_callback_handler_install($prompt, function() {});
         $char = stream_get_contents(STDIN, 1);
         readline_callback_handler_remove();
         return $char;
+    }
+
+    public function readGPIO()
+    {
+
     }
     
     public function run()
@@ -42,7 +47,7 @@ class MFD
         while(1)
         {
             // process user input
-            $this->processInput($this->readchar(''));
+            $this->processInput($this->readChar(''));
                                 
             
             // process input            
@@ -68,9 +73,20 @@ class MFD
             $this->setScreen = self::SCR_INIT;
         }
     }
-    
+
+    /**
+     * Set the current screen by name.
+     *
+     * @param $screen
+     * @return string
+     */
     public function setScreen($screen)
     {
+        // if given screen is valid, set it as current
+        if(in_array($screen, $this->screens)) {
+            return $this->screen = $screen;
+        }
+
         return $this->screen = 'init';
     }
 }

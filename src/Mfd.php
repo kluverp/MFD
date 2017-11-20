@@ -3,6 +3,7 @@
 namespace Mfd;
 
 use Mfd\Screens\InitScr;
+use React\EventLoop\Factory;
 
 class MFD
 {
@@ -15,62 +16,95 @@ class MFD
      * Current screen on display
      */
     private $screen = null;
+    private $rounds = 1200;
+    private $chars = ['|', '/', '-', '\\', '|'];
     
     
     const SCR_INIT = 'init';
-    
-    
+
+    /**
+     * MFD constructor.
+     */
     public function __construct()
     {
         // init all screens
         $this->screens[self::SCR_INIT] = new InitScr();
+
+        // set stream as non-blocking
+        if (stream_set_blocking(STDIN, false) !== true) {
+            fwrite(STDERR, 'ERROR: Unable to set STDIN non-blocking' . PHP_EOL);
+            exit(1);
+        }
+
+        // make the terminal return each key pressed and do not echo to screen
+        //system('stty cbreak -echo');
+        system('stty -icanon -echo');
+        $this->stdin = fopen('php://stdin', 'r');
     }
-    
+
     /**
-     * Read user input
+     * Run the Application
      */
-    public function readChar($prompt)
-    {
-        readline_callback_handler_install($prompt, function() {});
-        $char = stream_get_contents(STDIN, 1);
-        readline_callback_handler_remove();
-        return $char;
-    }
-
-    public function readGPIO()
-    {
-
-    }
-    
     public function run()
     {
+        // create new event loop
+        $loop = Factory::create();
+        $i = 0;
+
         while(1)
         {
+            // handle event loop
+            $loop->addTimer(0.01, function () use ($i) {
+
+                system('clear');
+
+                echo '[' . $this->chars[$i] . ']';
+                echo $this->screen;
+                echo $this->rounds;
+            });
+
             // process user input
-            $this->processInput($this->readChar(''));
+            $this->processInput();
+
+            $i++;
+            if($i == count($this->chars)) {
+                $i = 0;
+            }
                                 
             
             // process input            
-            $screen = $this->screens['init'];
-            $screen->setColor('green');
+           // $screen = $this->screens['init'];
+           // $screen->setColor('green');
             //$screen->clear();
             //$screen->render();
-            //sleep(1);       
-            
+            //sleep(1);
+
+
+            $loop->run();
         }
     }
-    
-    public function processInput($input)
+
+    /**
+     * Process user input, or GPIO signals
+     */
+    public function processInput()
     {
-        switch($input) {
-            case 1:
-                echo '1';
-            break;
-            case 2:
-                echo '2';
-            break;
-            default:
-            $this->setScreen = self::SCR_INIT;
+        $c = ord(fgetc($this->stdin));
+
+        switch($c) {
+            case 27:
+                $this->screen = 'ESC';
+                exit("\nQuit.\n");
+                break;
+            case 49:
+                $this->screen = 'one';
+                break;
+            case 50:
+                $this->screen = 'two';
+                break;
+            case 32:
+                $this->rounds -= 1;
+                break;
         }
     }
 

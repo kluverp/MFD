@@ -3,6 +3,9 @@
 // load the autoloader
 require_once __DIR__ . '/autoload.php';
 
+// load vendor autoloader
+require __DIR__ . '/vendor/autoload.php';
+
 // define namespace prefix
 define('NS_PREFIX', 'Mfd');
 

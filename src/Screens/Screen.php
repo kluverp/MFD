@@ -3,15 +3,21 @@
 namespace Mfd\Screens;
 
 use Mfd\Mfd as Mfd;
+use Mfd\IO;
 
 abstract class Screen 
-{
-    protected $name = '';
+{   
+    const NAME = '';
     
     /**
      * The MFD instance
      */
     protected $mfd = null;
+    
+    /**
+     * The IO  instance
+     */
+    protected $io = null;
     
     /**
      * ANSI screen colors
@@ -36,9 +42,10 @@ abstract class Screen
         "white"         => "97",
     ];
     
-    public function __construct(Mfd $mfd)
+    public function __construct(Mfd $mfd, IO $io)
     {
         $this->mfd = $mfd;
+        $this->io = $io;
     }
 
     /**
@@ -72,6 +79,6 @@ abstract class Screen
     
     public function __toString()
     {
-        return $this->name;
+        return self::NAME;
     }
 }

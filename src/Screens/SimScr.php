@@ -4,17 +4,19 @@ namespace Mfd\Screens;
 
 class SimScr extends Screen 
 {
+    const NAME = 'sim';
+    
     public function render()
     {            
         $panel = sprintf('|  %s  |  %s %s %s %s %s %s %s   |',
-            $this->annunciator(0, 'light-yellow'),
+            $this->annunciator($this->io->get('MASTER_CAUTION'), 'light-yellow'),
             $this->annunciator(0, 'red'),
             $this->annunciator(0, 'red'),
             $this->annunciator(0, 'red'),
             $this->annunciator(0, 'red'),
             $this->annunciator(0, 'red'),
             $this->annunciator(0, 'red'),
-            $this->annunciator(!$this->mfd->getAttr('rounds'), 'red')
+            $this->annunciator(!$this->io->get('rounds'), 'red')
         );
                
         echo trim('
@@ -23,7 +25,7 @@ class SimScr extends Screen
 +--------------------------------+
 | Screen: '. str_pad($this->mfd->getScreen(), 23) .'|
 +--------------------------------+
-| Rounds: '. str_pad($this->mfd->getAttr('rounds'), 23) .'|
+| Rounds: '. str_pad($this->io->get('rounds'), 23) .'|
 +--------------------------------+ 
 ');
     }

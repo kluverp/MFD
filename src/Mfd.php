@@ -18,26 +18,17 @@ class Mfd
      * Current screen on display
      */
     private $screen = null;
-    private $rounds = 1200;
+
     private $chars = ['|', '/', '-', '\\', '|'];
     
-    private $attributes = [
-        'rounds' => 5
-    ];
+    private $io = null;
     
-    
-    const SCR_INIT = 'init';
-    const SCR_SIM  = 'sim';
 
     /**
      * MFD constructor.
      */
     public function __construct()
     {
-        // init all screens
-        $this->screens[self::SCR_INIT] = new InitScr();
-        $this->screens[self::SCR_SIM]  = new SimScr($this);
-
         // set stream as non-blocking
         if (stream_set_blocking(STDIN, false) !== true) {
             fwrite(STDERR, 'ERROR: Unable to set STDIN non-blocking' . PHP_EOL);
@@ -50,12 +41,20 @@ class Mfd
         $this->stdin = fopen('php://stdin', 'r');
         
         // init 
-        $this->init();        
+        $this->init();
     }
         
     private function init()
     {
-        $this->setScreen(self::SCR_SIM);
+        // init IO
+        $this->io = new IO();
+        
+        // init all screens
+        $this->screens[InitScr::NAME] = new InitScr($this, $this->io);
+        $this->screens[SimScr::NAME]  = new SimScr($this, $this->io);
+        
+        // set default screen
+        $this->setScreen(SimScr::NAME);    
     }
 
     /**
@@ -75,8 +74,10 @@ class Mfd
                 system('clear');
 
                 echo '[' . $this->chars[$i] . ']';
-                echo $this->screen;
-                echo $this->rounds;
+                //echo $this->screen;
+                //echo $this->rounds;
+                
+                ($this->screens[$this->screen])->render();
             });
 
             // process user input
@@ -87,14 +88,6 @@ class Mfd
                 $i = 0;
             }
                                 
-            
-            // process input            
-           // $screen = $this->screens['init'];
-           // $screen->setColor('green');
-            //$screen->clear();
-            //$screen->render();
-            //sleep(1);
-
 
             $loop->run();            
         }
@@ -110,20 +103,26 @@ class Mfd
 
         // and process it
         switch($c) {
-            case 27:
-                $this->screen = 'ESC';
+            case 27: // escape
                 // make the terminal behave normally again
                 system('stty sane');
                 exit("\nQuit.\n");
                 break;
-            case 49:
-                $this->screen = 'one';
+            case 49: // 1
+                $this->screen = InitScr::NAME;
                 break;
-            case 50:
-                $this->screen = 'two';
+            case 50: // 2
+                $this->screen = SimScr::NAME;
                 break;
-            case 32:
-                $this->rounds -= 1;
+            case 32: // space bar
+                if($this->io->get('ROUNDS') > 0) {
+                    $this->io->set('ROUNDS', $this->io->get('ROUNDS') - 1);
+                } else {
+                    $this->io->raise('WRN_LIGHT_6');
+                }
+                break;
+            case 109:
+                    $this->io->toggle('MASTER_CAUTION');
                 break;
         }
     }

@@ -2,27 +2,44 @@
 
 namespace Mfd\Screens;
 
+use Mfd\Mfd as Mfd;
 
 abstract class Screen 
 {
+    protected $name = '';
+    
     /**
-     * Screen color
+     * The MFD instance
      */
-    protected $color = 7;
+    protected $mfd = null;
     
     /**
      * ANSI screen colors
-     */
-    protected $colors = [
-        'black'   => 0,
-        'red'     => 1,
-        'green'   => 2,
-        'yellow'  => 3,
-        'blue'    => 4,
-        'magenta' => 5,
-        'cyan'    => 6,
-        'white'   => 7
+     */   
+    protected $ansiColors = [
+        "black"         => "30",
+        "red"           => "31",
+        "green"         => "32",
+        "yellow"        => "33",
+        "blue"          => "34",
+        "magenta"       => "35",
+        "cyan"          => "36",
+        "light-gray"    => "37",
+        "default"       => "39",
+        "gray"          => "90",
+        "light-red"     => "91",        
+        "light-green"   => "92",        
+        "light-yellow"  => "93",        
+        "light-blue"    => "94",        
+        "light-magenta" => "95",        
+        "light-cyan"    => "96",                
+        "white"         => "97",
     ];
+    
+    public function __construct(Mfd $mfd)
+    {
+        $this->mfd = $mfd;
+    }
 
     /**
      * Clear the screen
@@ -52,5 +69,9 @@ abstract class Screen
         return false;
     }
 
-
+    
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

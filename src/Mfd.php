@@ -2,10 +2,12 @@
 
 namespace Mfd;
 
-use Mfd\Screens\InitScr;
 use React\EventLoop\Factory;
+use Mfd\Screens\InitScr;
+use Mfd\Screens\SimScr;
 
-class MFD
+
+class Mfd
 {
     /**
      * All Screens
@@ -19,8 +21,13 @@ class MFD
     private $rounds = 1200;
     private $chars = ['|', '/', '-', '\\', '|'];
     
+    private $attributes = [
+        'rounds' => 5
+    ];
+    
     
     const SCR_INIT = 'init';
+    const SCR_SIM  = 'sim';
 
     /**
      * MFD constructor.
@@ -29,6 +36,7 @@ class MFD
     {
         // init all screens
         $this->screens[self::SCR_INIT] = new InitScr();
+        $this->screens[self::SCR_SIM]  = new SimScr($this);
 
         // set stream as non-blocking
         if (stream_set_blocking(STDIN, false) !== true) {
@@ -40,6 +48,14 @@ class MFD
         //system('stty cbreak -echo');
         system('stty -icanon -echo');
         $this->stdin = fopen('php://stdin', 'r');
+        
+        // init 
+        $this->init();        
+    }
+        
+    private function init()
+    {
+        $this->setScreen(self::SCR_SIM);
     }
 
     /**
@@ -80,7 +96,7 @@ class MFD
             //sleep(1);
 
 
-            $loop->run();
+            $loop->run();            
         }
     }
 
@@ -89,8 +105,10 @@ class MFD
      */
     public function processInput()
     {
+        // get ASCII char code
         $c = ord(fgetc($this->stdin));
 
+        // and process it
         switch($c) {
             case 27:
                 $this->screen = 'ESC';
@@ -123,7 +141,26 @@ class MFD
             return $this->screen = $screen;
         }
 
-        return $this->screen = 'init';
+        return $this->screen = $screen;
+    }
+    
+    public function getScreen()
+    {
+        return $this->screen;
+    }
+    
+    public function getAttr($attr)
+    {
+        if(isset($this->attributes[$attr])) {
+            return $this->attributes[$attr];
+        }
+        
+        return false;
+        
+    }
+    
+    public function setAttr($attr, $value) {
+        return $this->attributes[$attr] = $value;
     }
 }
 

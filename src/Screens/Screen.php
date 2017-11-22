@@ -20,6 +20,16 @@ abstract class Screen
     protected $io = null;
     
     /**
+     * Console width
+     */
+    protected $cols = null;
+    
+    /**
+     * Console height
+     */
+    protected $lines = null;
+    
+    /**
      * ANSI screen colors
      */   
     protected $ansiColors = [
@@ -42,10 +52,17 @@ abstract class Screen
         "white"         => "97",
     ];
     
+    /**
+     * Screen Constructor
+     */
     public function __construct(Mfd $mfd, IO $io)
     {
         $this->mfd = $mfd;
         $this->io = $io;
+        
+        // store console dimensions
+        $this->cols  = system('tput cols');
+        $this->lines = system('tput lines');
     }
 
     /**
@@ -75,8 +92,27 @@ abstract class Screen
         
         return false;
     }
-
     
+    /**
+     * Return a colored string
+     */
+    public function cstr($str, $fgColor = 'default', $bgColor = false)
+    {
+        // default color
+        $colorCode = $this->ansiColors['default'];
+        
+        // if color is valid, set colorCode
+        if(isset($this->ansiColors[$fgColor])) {
+            $colorCode = $this->ansiColors[$fgColor];
+        }
+        
+        // return colored string
+        return sprintf("\e[%sm%s\e[0m", $colorCode, $str);
+    }
+
+    /**
+     * When cast to string, return the screen name
+     */
     public function __toString()
     {
         return self::NAME;

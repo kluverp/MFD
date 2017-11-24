@@ -20,8 +20,15 @@ class Mfd
     private $screen = null;
 
     private $chars = ['|', '/', '-', '\\', '|'];
-    
+
+    /**
+     * The IO object
+     *
+     * @var null
+     */
     private $io = null;
+
+    private $stdin = null;
     
 
     /**
@@ -43,11 +50,14 @@ class Mfd
         // init 
         $this->init();
     }
-        
+
+    /**
+     * Initialze the MFD
+     */
     private function init()
     {
-        // init IO
-        $this->io = new IO();
+        // init IO object
+        $this->io = new IO($this->stdin);
         
         // init all screens
         $this->screens[InitScr::NAME] = new InitScr($this, $this->io);
@@ -73,57 +83,26 @@ class Mfd
 
                 system('clear');
 
-                echo '[' . $this->chars[$i] . ']';
-                //echo $this->screen;
-                //echo $this->rounds;
-                
+                // render current screen
                 ($this->screens[$this->screen])->render();
+
+                // debug
+                echo '[' . $this->chars[$i] . ']';
             });
 
             // process user input
-            $this->processInput();
+            if($screen = $this->io->processInput())
+            {
+                $this->setScreen($screen);
+            }
 
             $i++;
             if($i == count($this->chars)) {
                 $i = 0;
             }
                                 
-
+            // next loop
             $loop->run();            
-        }
-    }
-
-    /**
-     * Process user input, or GPIO signals
-     */
-    public function processInput()
-    {
-        // get ASCII char code
-        $c = ord(fgetc($this->stdin));
-
-        // and process it
-        switch($c) {
-            case 27: // escape
-                // make the terminal behave normally again
-                system('stty sane');
-                exit("\nQuit.\n");
-                break;
-            case 49: // 1
-                $this->screen = InitScr::NAME;
-                break;
-            case 50: // 2
-                $this->screen = SimScr::NAME;
-                break;
-            case 32: // space bar
-                if($this->io->get('ROUNDS') > 0) {
-                    $this->io->set('ROUNDS', $this->io->get('ROUNDS') - 1);
-                } else {
-                    $this->io->raise('WRN_LIGHT_6');
-                }
-                break;
-            case 109:
-                    $this->io->toggle('MASTER_CAUTION');
-                break;
         }
     }
 

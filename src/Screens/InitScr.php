@@ -7,39 +7,45 @@ class InitScr extends Screen
     const NAME = 'init';
     
     private $items = [
-        'RADAR' => 'OK',
-        'FLIR' => 'OK',
-        'DTV' => 'OK',
-        'DVO' => 'OK',                 
-        'LASER DESIGNATOR' => 'OK',    
-        'RADAR JAMMER' => 'OK',        
-        'IR JAMMER' => 'OK',           
-        'NAVIGATION COMPUTER' => 'OK', 
-        'COMMUNICATIONS' => 'OK',      
-        'RADAR WARNING SYSTEM' => 'OK',
-        'IHADSS' => 'OK',              
-        'PNVS' => '--',                
-        'STABILISER' => '--',          
-        'MAIN ROTOR' => '--',          
-        'TAIL ROTOR' => '--',          
-        'ENGINE 1' => '--',            
-        'ENGINE 2' => '--',            
-        'HYDRAULICS' => '--',          
-        'OIL PRESSURE' => '--',        
+        'RADAR'                => '--',
+        'FLIR'                 => '--',
+        'DTV'                  => '--',
+        'DVO'                  => '--',                 
+        'LASER DESIGNATOR'     => '--',    
+        'RADAR JAMMER'         => '--',        
+        'IR JAMMER'            => '--',           
+        'NAVIGATION COMPUTER'  => '--', 
+        'COMMUNICATIONS'       => '--',      
+        'RADAR WARNING SYSTEM' => '--',
+        'IHADSS'               => '--',              
+        'PNVS'                 => '--',                
+        'STABILISER'           => '--',          
+        'MAIN ROTOR'           => '--',          
+        'TAIL ROTOR'           => '--',          
+        'ENGINE 1'             => '--',            
+        'ENGINE 2'             => '--',            
+        'HYDRAULICS'           => '--',          
+        'OIL PRESSURE'         => '--'
     ];
     
-    public function __construct($mdf, $io)
+    private $counter = 0;
+    
+    public function __construct($io)
     {
-        parent::__construct($mdf, $io);
+        parent::__construct($io);
         
         // init
-        foreach($this->items as $key => $value) {
+        /*foreach($this->items as $key => $value) {
             $this->items[$key] = $this->setValue('failure');
-        }
+        }*/
     }
         
     public function render()
     {        
+        $this->counter++;
+        
+        
+    
         $str = "\e[32m";
         foreach($this->items as $name => $value) {
             $name = '  ' . $this->cstr($name, 'green');
@@ -48,7 +54,8 @@ class InitScr extends Screen
             $str .= str_pad($name, $pad) . $value . "\n";
         }
         
-        echo trim($str) . "\e[0m]";
+        echo trim($str) . "\e[0m
+";
     }
     
     public function getValue($key)

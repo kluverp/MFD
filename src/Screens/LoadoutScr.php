@@ -2,7 +2,7 @@
 
 namespace Mfd\Screens;
 
-class LoudoutScr extends Screen
+class LoadoutScr extends Screen
 {
     /**
      * Screen identifier
@@ -15,7 +15,7 @@ class LoudoutScr extends Screen
      */
     public function render()
     {        
-        $str = trim(
+        echo
 "
                 ╭───╓╖───╮
                 │   ║║   │
@@ -31,9 +31,30 @@ class LoudoutScr extends Screen
   ▐▌│ │    │       AUTO       │    │ │▐▌
   ▐▌╰─│    │──────────────────│    │─╯▐▌
  ╱  ╲ ╰────╯                  ╰────╯ ╱  ╲ 
-"        
-);
-    }    
+";
+    }
+    
+    /**
+     * Returns the number of rounds. 
+     */
+    private function getRounds()
+    {
+        $rounds = $this->io->getRounds();
+        
+        switch($rounds) {
+            case $rounds < 500:
+                $str = $this->cstr($rounds, 'yellow');
+            break;
+            case $rounds < 100:
+                $str = $this->cstr($rounds, 'red');
+            break;
+            default:
+                $str = $rounds;
+            
+        }
+        
+        return str_pad($rounds, 4);
+    }
 }
 
 

@@ -2,11 +2,14 @@
 
 namespace Mfd\Screens;
 
-use Mfd\Mfd as Mfd;
+//use Mfd\Mfd as Mfd;
 use Mfd\IO;
 
 abstract class Screen 
 {   
+    /**
+     * Screen identifying name
+     */
     const NAME = '';
     
     /**
@@ -55,9 +58,9 @@ abstract class Screen
     /**
      * Screen Constructor
      */
-    public function __construct(Mfd $mfd, IO $io)
+    public function __construct(IO $io)
     {
-        $this->mfd = $mfd;
+        // the io object
         $this->io = $io;
         
         // store console dimensions

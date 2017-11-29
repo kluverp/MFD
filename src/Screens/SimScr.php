@@ -26,8 +26,6 @@ class SimScr extends Screen
 +--------------------------------+
 | '. $this->annunciator($this->io->get('BINGO_ROUNDS'), 'red') . '    | BINGO_ROUNDS   | F     |
 +--------------------------------+
-| Screen: '. str_pad($this->mfd->getScreen(), 23) .'|
-+--------------------------------+
 | Rounds: '. str_pad($this->io->get('rounds'), 23) .'|
 +--------------------------------+ 
 | Missiles: '. str_pad($this->io->get('missiles'), 23) .'|

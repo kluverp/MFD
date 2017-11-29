@@ -3,8 +3,12 @@
 namespace Mfd;
 
 use React\EventLoop\Factory;
+use Mfd\Screens\EngineScr;
+use Mfd\Screens\HorizonScr;
 use Mfd\Screens\InitScr;
+use Mfd\Screens\LoadoutScr;
 use Mfd\Screens\SimScr;
+use Mfd\Screens\TcasScr;
 
 
 class Mfd
@@ -60,8 +64,12 @@ class Mfd
         $this->io = new IO($this->stdin);
         
         // init all screens
-        $this->screens[InitScr::NAME] = new InitScr($this, $this->io);
-        $this->screens[SimScr::NAME]  = new SimScr($this, $this->io);
+        $this->screens[EngineScr::NAME]  = new EngineScr($this->io);
+        $this->screens[HorizonScr::NAME] = new HorizonScr($this->io);
+        $this->screens[InitScr::NAME]    = new InitScr($this->io);
+        $this->screens[LoadoutScr::NAME] = new LoadoutScr($this->io);        
+        $this->screens[SimScr::NAME]     = new SimScr($this->io);
+        $this->screens[TcasScr::NAME]    = new TcasScr($this->io);
         
         // set default screen
         $this->setScreen(SimScr::NAME);    

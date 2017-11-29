@@ -2,8 +2,12 @@
 
 namespace Mfd;
 
+use Mfd\Screens\EngineScr;
+use Mfd\Screens\HorizonScr;
 use Mfd\Screens\InitScr;
+use Mfd\Screens\LoadoutScr;
 use Mfd\Screens\SimScr;
+use Mfd\Screens\TcasScr;
 
 class IO {
 
@@ -77,11 +81,23 @@ class IO {
                 system('stty sane');
                 exit("\nQuit.\n");
                 break;
+            case 48: // 0
+                return SimScr::NAME;
+                break;
             case 49: // 1
                 return InitScr::NAME;
                 break;
             case 50: // 2
-                return SimScr::NAME;
+                return EngineScr::NAME;
+                break;
+            case 51: // 3
+                return HorizonScr::NAME;
+                break;
+            case 52: // 4
+                return TcasScr::NAME;
+                break;
+            case 53: // 5
+                return LoadoutScr::NAME;
                 break;
             case 32: // space bar
                 if($this->get('ROUNDS') > 0) {

@@ -33,6 +33,8 @@ class Mfd
     private $io = null;
 
     private $stdin = null;
+
+    private $i = 0;
     
 
     /**
@@ -45,11 +47,11 @@ class Mfd
             fwrite(STDERR, 'ERROR: Unable to set STDIN non-blocking' . PHP_EOL);
             exit(1);
         }
-/*
+
         // make the terminal return each key pressed and do not echo to screen
         //system('stty cbreak -echo');
         system('stty -icanon -echo');
-        */
+
         $this->stdin = fopen('php://stdin', 'r');
         
         
@@ -84,23 +86,27 @@ class Mfd
     {
         // create new event loop
         $loop = Factory::create();
-        $i = 0;
+        $this->i = 0;
+
+        // clear the screen
+        system('clear');
 
         // handle event loop
-        $loop->addPeriodicTimer(0.01, function () {
+        $loop->addPeriodicTimer(0.05, function () {
 
-            system('clear');
+            // move cursor to top, do not clear screen
+            echo "\033[;H";
 
             // render current screen
             ($this->screens[$this->screen])->render();
 
             // debug
-            echo '[' . $this->chars[$this->i] . ']';
+            echo "\n[" . $this->chars[$this->i] . "]";
             
             // process user input
-            /*if($screen = $this->io->processInput()) {
+            if($screen = $this->io->processInput()) {
                 $this->setScreen($screen);
-            }*/
+            }
 
             $this->i++;
             if($this->i == count($this->chars)) {

@@ -5,6 +5,42 @@ namespace Mfd\Screens;
 //use Mfd\Mfd as Mfd;
 use Mfd\IO;
 
+
+/*
+
++-------------------------------------------------------------------------------------------------+
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
+|                                                                                                 |
++-------------------------------------------------------------------------------------------------+
+
+*/
+
 abstract class Screen 
 {   
     /**
@@ -31,6 +67,11 @@ abstract class Screen
      * Console height
      */
     protected $lines = null;
+    
+    /**
+     * Flag indicating when re-draw is needed
+     */
+    protected $dirty = false;
     
     /**
      * ANSI screen colors
@@ -73,15 +114,35 @@ abstract class Screen
      */
     public function clear()
     {
-        echo `clear`;
+        system('clear');
     }
     
     /**
-     * Render the screen
+     * Draw the screen
      */
-    public function render()
+    public function draw()
     {
     
+    }
+    
+    /**
+     * Indicates when the screen is dirty, and must be re-drawn.
+     */
+    public function isDirty()
+    {
+        if($this->dirty) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Mark the screen as dirty, so redraw is needed.
+     */
+    public function dirty()
+    {
+        return $this->dirty = true;
     }
     
     /**

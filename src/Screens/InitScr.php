@@ -40,7 +40,7 @@ class InitScr extends Screen
         }*/
     }
         
-    public function render()
+    public function getContent()
     {        
         $this->counter++;
         
@@ -54,7 +54,7 @@ class InitScr extends Screen
             $str .= str_pad($name, $pad) . $value . "\n";
         }
         
-        echo trim($str) . "\e[0m
+        return trim($str) . "\e[0m
 ";
     }
     

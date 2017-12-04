@@ -122,6 +122,15 @@ abstract class Screen
      */
     public function draw()
     {
+        // reset the dirty flag
+        $this->dirty = false;
+
+        // move cursor to top, do not clear screen
+        echo "\033[;H";
+
+        echo $this->getContent();
+
+        echo 'JAA' . time();
     
     }
     

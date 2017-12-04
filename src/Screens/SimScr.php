@@ -6,9 +6,9 @@ class SimScr extends Screen
 {
     const NAME = 'sim';
     
-    public function render()
+    public function getContent()
     {
-        echo trim('
+        return trim('
 +---------------------------------        
 | '. $this->cstr('Light', 'green') .' | '. $this->cstr('Item', 'green') .'           | '. $this->cstr('Key', 'green') . '   |        
 +---------------------------------

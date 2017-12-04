@@ -13,9 +13,9 @@ class LoadoutScr extends Screen
     /**
      * Render the screen
      */
-    public function render()
+    public function getContent()
     {        
-        echo
+        return
 "
                 ╭───╓╖───╮
                 │   ║║   │

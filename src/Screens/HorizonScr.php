@@ -6,9 +6,9 @@ class HorizonScr extends Screen
 {
     const NAME = 'horizon';
         
-    public function render()
+    public function getContent()
     {                
-        echo trim("Horizon screen");
+        return trim("Horizon screen");
     }
 }
 /*

@@ -7,9 +7,9 @@ class EngineScr extends Screen
     const NAME = 'engine';
         
         
-    public function draw()
+    public function getContent()
     {                
-        echo trim("
+        return trim("
 +-------------------------------------------------------------------------------------------------+
 |      TORQUE                      TGT  TGT
       ┌─┐  ┌─┐                     ┌─┐  ┌─┐

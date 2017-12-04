@@ -32,9 +32,10 @@ class IO {
 
     private $stdin = null;
 
-    public function __construct($stdin)
+    public function __construct($stdin, $mfd)
     {
         $this->stdin = $stdin;
+        $this->mfd = $mfd;
     }
 
 
@@ -125,6 +126,12 @@ class IO {
                 $this->toggle('ENG_FIRE_2');
                 break;
         }
+
+        // redraw screen
+        if($c) {
+            $this->mfd->getScreen()->dirty();
+        }
+
     }
 
 }

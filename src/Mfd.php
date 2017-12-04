@@ -65,7 +65,7 @@ class Mfd
     private function init()
     {
         // init IO object
-        $this->io = new IO($this->stdin);
+        $this->io = new IO($this->stdin, $this);
         
         // init all screens
         $this->screens[EngineScr::NAME]  = new EngineScr($this->io);
@@ -94,14 +94,15 @@ class Mfd
         // handle event loop
         $loop->addPeriodicTimer(0.05, function () {
 
-            // move cursor to top, do not clear screen
-            echo "\033[;H";
+            $screen = $this->getScreen();
 
-            // render current screen
-            ($this->screens[$this->screen])->render();
+            // if screen is dirty, we redraw
+            if($screen->isDirty()) {
+                $screen->draw();
+            }
 
             // debug
-            echo "\n[" . $this->chars[$this->i] . "]";
+            //echo "\n[" . $this->chars[$this->i] . "]";
             
             // process user input
             if($screen = $this->io->processInput()) {
@@ -137,7 +138,12 @@ class Mfd
     
     public function getScreen()
     {
-        return $this->screen;
+        if(isset($this->screens[$this->screen]))
+        {
+            return $this->screens[$this->screen];
+        }
+
+        return false;
     }
     
     public function getAttr($attr)

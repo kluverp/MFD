@@ -6,9 +6,9 @@ class TcasScr extends Screen
 {
     const NAME = 'tcas';
         
-    public function render()
+    public function getContent()
     {                
-        echo trim("TCAS screen");
+        return trim("TCAS screen");
     }
 }
 

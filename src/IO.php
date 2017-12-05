@@ -23,6 +23,9 @@ class IO {
     private $BINGO_ROUNDS   = 0; // FIRE_BTN
     private $ROUNDS         = 12;
     private $MISSILES       = 4;
+    private $FUEL           = 2440;
+    private $TIME           = null;
+    private $FUEL_CONSUMPTION = 1.6; // in pounds per second
     
     // MASTER_ARM (Switch RED)
     // JETTISON ALL (Switch ORANGE)
@@ -36,6 +39,8 @@ class IO {
     {
         $this->stdin = $stdin;
         $this->mfd = $mfd;
+        
+        $this->TIME = time();
     }
 
 
@@ -83,22 +88,22 @@ class IO {
                 exit("\nQuit.\n");
                 break;
             case 48: // 0
-                return SimScr::NAME;
+                $this->mfd->setScreen(SimScr::NAME);
                 break;
             case 49: // 1
-                return InitScr::NAME;
+                $this->mfd->setScreen(InitScr::NAME);
                 break;
             case 50: // 2
-                return EngineScr::NAME;
+                $this->mfd->setScreen(EngineScr::NAME);
                 break;
             case 51: // 3
-                return HorizonScr::NAME;
+                $this->mfd->setScreen(HorizonScr::NAME);
                 break;
             case 52: // 4
-                return TcasScr::NAME;
+                $this->mfd->setScreen(TcasScr::NAME);
                 break;
             case 53: // 5
-                return LoadoutScr::NAME;
+                $this->mfd->setScreen(LoadoutScr::NAME);
                 break;
             case 32: // space bar
                 if($this->get('ROUNDS') > 0) {
@@ -131,6 +136,9 @@ class IO {
         if($c) {
             $this->mfd->getScreen()->dirty();
         }
+        
+        
+        $this->FUEL -= $this->FUEL_CONSUMPTION * (time() - $this->TIME);
 
     }
 

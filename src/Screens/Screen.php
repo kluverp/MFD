@@ -128,9 +128,10 @@ abstract class Screen
         // move cursor to top, do not clear screen
         echo "\033[;H";
 
-        echo $this->getContent();
+        $content = $this->getContent();
+        echo str_pad($content, ($this->cols * $this->lines));
 
-        echo 'JAA' . time();
+        echo '[' . date('H:i:s') . ']';
     
     }
     

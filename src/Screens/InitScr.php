@@ -4,58 +4,38 @@ namespace Mfd\Screens;
 
 class InitScr extends Screen
 {
-    const NAME = 'init';
-    
-    private $items = [
-        'RADAR'                => '--',
-        'FLIR'                 => '--',
-        'DTV'                  => '--',
-        'DVO'                  => '--',                 
-        'LASER DESIGNATOR'     => '--',    
-        'RADAR JAMMER'         => '--',        
-        'IR JAMMER'            => '--',           
-        'NAVIGATION COMPUTER'  => '--', 
-        'COMMUNICATIONS'       => '--',      
-        'RADAR WARNING SYSTEM' => '--',
-        'IHADSS'               => '--',              
-        'PNVS'                 => '--',                
-        'STABILISER'           => '--',          
-        'MAIN ROTOR'           => '--',          
-        'TAIL ROTOR'           => '--',          
-        'ENGINE 1'             => '--',            
-        'ENGINE 2'             => '--',            
-        'HYDRAULICS'           => '--',          
-        'OIL PRESSURE'         => '--'
-    ];
-    
-    private $counter = 0;
+    const NAME = 'init';            
     
     public function __construct($io)
     {
         parent::__construct($io);
         
-        // init
-        /*foreach($this->items as $key => $value) {
-            $this->items[$key] = $this->setValue('failure');
-        }*/
+        $this->time = time();
     }
         
     public function getContent()
     {        
-        $this->counter++;
-        
-        
-    
-        $str = "\e[32m";
-        foreach($this->items as $name => $value) {
-            $name = '  ' . $this->cstr($name, 'green');
-            $value = $value . '  ';
-            $pad = $this->cols - strlen($value);
-            $str .= str_pad($name, $pad) . $value . "\n";
-        }
-        
-        return trim($str) . "\e[0m
-";
+        return [
+            'RADAR                      OK',
+            'FLIR                       OK',
+            'DTV                        OK',
+            'DVO                        OK',                 
+            'LASER DESIGNATOR           OK',    
+            'RADAR JAMMER               OK',        
+            'IR JAMMER                  OK',           
+            'NAVIGATION COMPUTER        OK', 
+            'COMMUNICATIONS             OK',      
+            'RADAR WARNING SYSTEM       OK',
+            'IHADSS                     OK',              
+            'PNVS                       OK',                
+            'STABILISER                 OK',          
+            'MAIN ROTOR                 OK',          
+            'TAIL ROTOR                 OK',          
+            'ENGINE 1                   OK',            
+            'ENGINE 2                   OK',            
+            'HYDRAULICS                 OK',          
+            'OIL PRESSURE               OK'
+        ];
     }
     
     public function getValue($key)

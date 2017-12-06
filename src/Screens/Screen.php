@@ -128,11 +128,24 @@ abstract class Screen
         // move cursor to top, do not clear screen
         echo "\033[;H";
 
-        $content = $this->getContent();
-        echo str_pad($content, ($this->cols * $this->lines));
+        // convert content array to full string
+        $content = $this->contentToString();
+        
+        // draw to the console and pad to screen size
+        echo $this->mb_str_pad($content, $this->cols * ($this->lines - 2)); // we cut two lines off: 1) the newline at first row and 2) the date below
 
-        echo '[' . date('H:i:s') . ']';
+        echo "\n" . '[' . date('H:i:s') . ']';
     
+    }
+    
+    public function contentToString($color = 'green')
+    {
+        $str = '';
+        foreach($this->getContent() as $row) {
+            $str .= $this->row($row);
+        }
+        
+        return $this->cstr($str, $color);
     }
     
     /**
@@ -182,6 +195,35 @@ abstract class Screen
         
         // return colored string
         return sprintf("\e[%sm%s\e[0m", $colorCode, $str);
+    }
+    
+    /**
+     * Print a row to screen. Prepends a newline to each row, and pads the row with enough spaces 
+     * on both sides to fill the entire screen. This way, the objects are always centered.
+     *
+     * @param string $str
+     * @return string
+     */
+    protected function row($str = '')
+    {              
+        $str = $this->mb_str_pad($str, $this->cols -1, '#', STR_PAD_BOTH);
+        
+        return "\n" . $str;
+    }
+    
+    /**
+     * mb_str_pad
+     *
+     * @param string $input
+     * @param int $pad_length
+     * @param string $pad_string
+     * @param int $pad_type
+     * @return string
+     */
+    protected function mb_str_pad( $input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    {
+        $diff = strlen( $input ) - mb_strlen( preg_replace('/\\e\[\d{1,2}m/', '', $input));
+        return str_pad( $input, $pad_length + $diff, $pad_string, $pad_type );
     }
 
     /**

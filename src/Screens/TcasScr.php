@@ -8,7 +8,9 @@ class TcasScr extends Screen
         
     public function getContent()
     {                
-        return trim("TCAS screen");
+        return [
+            'TCAS'
+        ];
     }
 }
 

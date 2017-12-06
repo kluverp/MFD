@@ -15,23 +15,22 @@ class LoadoutScr extends Screen
      */
     public function getContent()
     {        
-        return
-"
-                ╭───╓╖───╮
-                │   ║║   │
-                │┌──╨╨──┐│
-                ││ 1200 ││
-                │└──────┘│
-  ╭╮  ╭────╮ ╭╮ │        │ ╭╮ ╭────╮  ╭╮
-  ▐▌╭─│    │─▐▌─╯  CHAFF ╰─▐▌─│    │─╮▐▌
-  ▐▌│ │    │ ▐▌     30     ▐▌ │    │ │▐▌
- ╱  ╲ │    │ ▐▌            ▐▌ │    │ ╱  ╲
-    │ │ 50 │╱  ╲   FLARE  ╱  ╲│ 50 │ │
-  ╭╮│ │    │        30        │    │ │╭╮
-  ▐▌│ │    │       AUTO       │    │ │▐▌
-  ▐▌╰─│    │──────────────────│    │─╯▐▌
- ╱  ╲ ╰────╯                  ╰────╯ ╱  ╲ 
-";
+        return [
+            '                ╭───╓╖───╮                ',
+            '                │   ║║   │                ',
+            '                │┌──╨╨──┐│                ',
+            sprintf('                ││ %s ││                ', $this->getRounds()),
+            '                │└──────┘│                ',
+            '  ╭╮  ╭────╮ ╭╮ │        │ ╭╮ ╭────╮  ╭╮  ',
+            '  ▐▌╭─│    │─▐▌─╯  CHAFF ╰─▐▌─│    │─╮▐▌  ',
+            '  ▐▌│ │    │ ▐▌     30     ▐▌ │    │ │▐▌  ',
+            ' ╱  ╲ │    │ ▐▌            ▐▌ │    │ ╱  ╲ ',
+            '    │ │ 50 │╱  ╲   FLARE  ╱  ╲│ 50 │ │    ',
+            '  ╭╮│ │    │        30        │    │ │╭╮  ',
+            '  ▐▌│ │    │       AUTO       │    │ │▐▌  ',
+            '  ▐▌╰─│    │──────────────────│    │─╯▐▌  ',
+            ' ╱  ╲ ╰────╯                  ╰────╯ ╱  ╲ ',
+        ];
     }
     
     /**
@@ -39,7 +38,7 @@ class LoadoutScr extends Screen
      */
     private function getRounds()
     {
-        $rounds = $this->io->getRounds();
+        $rounds = $this->io->get('rounds');
         
         switch($rounds) {
             case $rounds < 500:
@@ -49,11 +48,10 @@ class LoadoutScr extends Screen
                 $str = $this->cstr($rounds, 'red');
             break;
             default:
-                $str = $rounds;
-            
+                $str = $rounds;            
         }
         
-        return str_pad($rounds, 4);
+        return $this->mb_str_pad($str, 4, 0, STR_PAD_LEFT);
     }
 }
 

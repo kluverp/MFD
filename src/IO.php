@@ -2,6 +2,7 @@
 
 namespace Mfd;
 
+use Mfd\Screens\DamageScr;
 use Mfd\Screens\EngineScr;
 use Mfd\Screens\HorizonScr;
 use Mfd\Screens\InitScr;
@@ -92,7 +93,8 @@ class IO {
                 $this->mfd->setScreen(SimScr::NAME);
                 break;
             case 49: // 1
-                $this->mfd->setScreen(InitScr::NAME);
+                $this->mfd->setScreen(DamageScr::NAME);
+                //$this->mfd->setScreen(InitScr::NAME);
                 break;
             case 50: // 2
                 $this->mfd->setScreen(EngineScr::NAME);

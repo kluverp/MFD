@@ -9,7 +9,21 @@ class TcasScr extends Screen
     public function getContent()
     {                
         return [
-            'TCAS'
+            '
+╲                        ╱
+ ╲                      ╱
+  ╲                    ╱
+   ╲                  ╱
+    ╲                ╱
+     ╲              ╱
+      ╲            ╱
+       ╲          ╱
+        ╲        ╱
+         ╲      ╱
+          ╲    ╱
+           ╲  ╱
+            ╲╱
+            '
         ];
     }
 }

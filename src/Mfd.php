@@ -9,7 +9,7 @@ use Mfd\Screens\InitScr;
 use Mfd\Screens\LoadoutScr;
 use Mfd\Screens\SimScr;
 use Mfd\Screens\TcasScr;
-
+use Mfd\Screens\DamageScr;
 
 class Mfd
 {
@@ -74,6 +74,7 @@ class Mfd
         $this->screens[LoadoutScr::NAME] = new LoadoutScr($this->io);        
         $this->screens[SimScr::NAME]     = new SimScr($this->io);
         $this->screens[TcasScr::NAME]    = new TcasScr($this->io);
+        $this->screens[DamageScr::NAME]  = new DamageScr($this->io);
         
         // set default screen
         $this->setScreen(SimScr::NAME);    

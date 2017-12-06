@@ -201,6 +201,12 @@ abstract class Screen
             $returnCode = $this->ansiColors[$returnColor];
         }
 
+        if($bgColor) {
+           // if(isset($this->ansiColors[$bgColor])) {
+                $str = "\e[{$bgColor}m". $str ."\e[49m";
+           // }
+        }
+
         // return colored string
         return sprintf("\e[%sm%s\e[%sm", $colorCode, $str, $returnCode);
     }

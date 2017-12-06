@@ -95,9 +95,10 @@ abstract class Screen
         "light-cyan"    => "96",                
         "white"         => "97",
     ];
-    
+
     /**
-     * Screen Constructor
+     * Screen constructor.
+     * @param IO $io
      */
     public function __construct(IO $io)
     {
@@ -135,9 +136,14 @@ abstract class Screen
         echo $this->mb_str_pad($content, $this->cols * ($this->lines - 2)); // we cut two lines off: 1) the newline at first row and 2) the date below
 
         echo "\n" . '[' . date('H:i:s') . ']';
-    
     }
-    
+
+    /**
+     * Convert screen definition array to string.
+     *
+     * @param string $color
+     * @return string
+     */
     public function contentToString($color = 'green')
     {
         $str = '';
@@ -147,9 +153,11 @@ abstract class Screen
         
         return $this->cstr($str, $color);
     }
-    
+
     /**
      * Indicates when the screen is dirty, and must be re-drawn.
+     *
+     * @return bool
      */
     public function isDirty()
     {
@@ -159,42 +167,42 @@ abstract class Screen
         
         return false;
     }
-    
+
     /**
      * Mark the screen as dirty, so redraw is needed.
+     *
+     * @return bool
      */
     public function dirty()
     {
         return $this->dirty = true;
     }
-    
+
     /**
-     * Set screen color
+     * Prepend and append a console escape sequence to color a piece of string.
+     *
+     * @param $str
+     * @param string $fgColor
+     * @param bool $bgColor
+     * @return string
      */
-    public function setColor($color)
-    {
-        if (isset($this->colors[$color])) {
-            return $this->color = $this->colors[$color];
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Return a colored string
-     */
-    public function cstr($str, $fgColor = 'default', $bgColor = false)
+    public function cstr($str, $fgColor = 'default', $returnColor = 'default', $bgColor = false)
     {
         // default color
         $colorCode = $this->ansiColors['default'];
+        $returnCode = $this->ansiColors['default'];
         
         // if color is valid, set colorCode
         if(isset($this->ansiColors[$fgColor])) {
             $colorCode = $this->ansiColors[$fgColor];
         }
-        
+
+        if(isset($this->ansiColors[$returnColor])) {
+            $returnCode = $this->ansiColors[$returnColor];
+        }
+
         // return colored string
-        return sprintf("\e[%sm%s\e[0m", $colorCode, $str);
+        return sprintf("\e[%sm%s\e[%sm", $colorCode, $str, $returnCode);
     }
     
     /**
@@ -206,16 +214,17 @@ abstract class Screen
      */
     protected function row($str = '')
     {              
-        $str = $this->mb_str_pad($str, $this->cols -1, '#', STR_PAD_BOTH);
+        $str = $this->mb_str_pad($str, $this->cols -1, ' ', STR_PAD_BOTH);
         
         return "\n" . $str;
     }
-    
+
     /**
-     * mb_str_pad
+     * Multi-Byte string padding. Special chars are counted in a different way by str_pad. So we implement a simple
+     * MB version so padding is what we expect it to be.
      *
-     * @param string $input
-     * @param int $pad_length
+     * @param $input
+     * @param $pad_length
      * @param string $pad_string
      * @param int $pad_type
      * @return string
@@ -228,6 +237,8 @@ abstract class Screen
 
     /**
      * When cast to string, return the screen name
+     *
+     * @return string
      */
     public function __toString()
     {

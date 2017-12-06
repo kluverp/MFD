@@ -41,11 +41,11 @@ class LoadoutScr extends Screen
         $rounds = $this->io->get('rounds');
         
         switch($rounds) {
-            case $rounds < 500:
-                $str = $this->cstr($rounds, 'yellow');
-            break;
             case $rounds < 100:
-                $str = $this->cstr($rounds, 'red');
+                $str = $this->cstr($rounds, 'yellow', 'green');
+            break;
+            case $rounds < 500:
+                $str = $this->cstr($rounds, 'red', 'green');
             break;
             default:
                 $str = $rounds;            

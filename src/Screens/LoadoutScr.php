@@ -38,20 +38,28 @@ class LoadoutScr extends Screen
      */
     private function getRounds()
     {
+        // get rounds
         $rounds = $this->io->get('rounds');
-        
+
+        // pad it with leading zeros
+        $rounds = str_pad($rounds, 4, '0', STR_PAD_LEFT);
+
+        // add colors
         switch($rounds) {
+            case $rounds == 0:
+                $str = $this->cstr($rounds, 'white', 'green', 41);
+                break;
             case $rounds < 100:
-                $str = $this->cstr($rounds, 'yellow', 'green');
+                $str = $this->cstr($rounds, 'red', 'green');
             break;
             case $rounds < 500:
-                $str = $this->cstr($rounds, 'red', 'green');
+                $str = $this->cstr($rounds, 'yellow', 'green');
             break;
             default:
                 $str = $rounds;            
         }
         
-        return $this->mb_str_pad($str, 4, 0, STR_PAD_LEFT);
+        return $str;
     }
 }
 

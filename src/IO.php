@@ -85,6 +85,7 @@ class IO {
             case 27: // escape
                 // make the terminal behave normally again
                 system('stty sane');
+                system('clear');
                 exit("\nQuit.\n");
                 break;
             case 48: // 0
@@ -111,6 +112,9 @@ class IO {
                 } else {
                     $this->raise('BINGO_ROUNDS');
                 }
+                break;
+            case 98: // b
+                $this->toggle('BINGO_ROUNDS');
                 break;
             case 99: // c
                 $this->toggle('CANOPY');
